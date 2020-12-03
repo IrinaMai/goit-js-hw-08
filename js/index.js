@@ -42,30 +42,25 @@ function onClickOpenModal (event) {
         refs.lightboxImage.dataset.index = event.target.dataset.index;
         window.addEventListener('keydown', supervisorFunction);
         refs.lightboxOverlay.addEventListener('click', supervisorFunction);
+        refs.lightboxButton.addEventListener('click', closeModal);
     }
 };
 
+refs.jsGallery.addEventListener('click', onClickOpenModal);
+
 //==========SET CLOSES OPTIONS=============================
 
-const onBtnClsModal = () => {
+const closeModal = () => {
     refs.jsLightbox.classList.remove('is-open');
     refs.lightboxImage.src = "#";
-};
-
-const onClickCloseModal = () => {
-    refs.jsLightbox.classList.remove('is-open');
-    refs.lightboxImage.src = "#";
-
-};
-
-const onEscCloseModal = () => {
-    refs.jsLightbox.classList.remove('is-open');
-    refs.lightboxImage.src = "#";
+    window.removeEventListener('keydown', supervisorFunction);
+    refs.lightboxOverlay.removeEventListener('click', supervisorFunction);
+    refs.lightboxButton.removeEventListener('click', closeModal);
 };
 
 //==================SCROLL LAGE IMG=================================
 
-function scroll (nextIndex){
+function scroll(nextIndex) {
     const nextImage = document.querySelector(`[data-index = "${nextIndex}"]`);
     refs.lightboxImage.src = nextImage.dataset.source;
     refs.lightboxImage.dataset.index = nextImage.dataset.index;
@@ -82,16 +77,17 @@ const onLeftScroll = () => {
     let nextIndex = Number(refs.lightboxImage.dataset.index) - 1;
     (nextIndex > 0) ? nextIndex : nextIndex = 0;
     scroll(nextIndex);
+
 };
  
 //==============================LISTENERS==============================================
 
 const supervisorFunction = (event) => {
     if (event.code === "Escape") {
-        onEscCloseModal();
+        closeModal();
     };
     if(event.target === event.currentTarget){
-        onClickCloseModal();
+        closeModal();
     };
     if (event.key === 'ArrowRight') {
         onRightScroll();
@@ -102,11 +98,8 @@ const supervisorFunction = (event) => {
 };
 
 
-refs.jsGallery.addEventListener('click', onClickOpenModal);
-refs.lightboxButton.addEventListener('click', onBtnClsModal);
 
-refs.lightboxOverlay.addEventListener('click', supervisorFunction);
-window.addEventListener('keydown', supervisorFunction);
+
 
 
 
